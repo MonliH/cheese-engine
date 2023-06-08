@@ -20,6 +20,20 @@ public class Piece {
     private Color color;
     private Type type;
 
+    public static Piece WhitePawn = new Piece(Color.WHITE, Type.PAWN);
+    public static Piece WhiteRook = new Piece(Color.WHITE, Type.ROOK);
+    public static Piece WhiteKnight = new Piece(Color.WHITE, Type.KNIGHT);
+    public static Piece WhiteBishop = new Piece(Color.WHITE, Type.BISHOP);
+    public static Piece WhiteQueen = new Piece(Color.WHITE, Type.QUEEN);
+    public static Piece WhiteKing = new Piece(Color.WHITE, Type.KING);
+
+    public static Piece BlackPawn = new Piece(Color.BLACK, Type.PAWN);
+    public static Piece BlackRook = new Piece(Color.BLACK, Type.ROOK);
+    public static Piece BlackKnight = new Piece(Color.BLACK, Type.KNIGHT);
+    public static Piece BlackBishop = new Piece(Color.BLACK, Type.BISHOP);
+    public static Piece BlackQueen = new Piece(Color.BLACK, Type.QUEEN);
+    public static Piece BlackKing = new Piece(Color.BLACK, Type.KING);
+
     public Piece(Color color, Type type) {
         this.color = color;
         this.type = type;
@@ -33,14 +47,28 @@ public class Piece {
         return type;
     }
 
+    public boolean isWhite() {
+        return color == Color.WHITE;
+    }
+
     public char toCharPiece() {
-        if (type == Type.PAWN) return 'P';
-        if (type == Type.ROOK) return 'R';
-        if (type == Type.KNIGHT) return 'N';
-        if (type == Type.BISHOP) return 'B';
-        if (type == Type.QUEEN) return 'Q';
-        if (type == Type.KING) return 'K';
-        return '-';
+        // above using switch statement
+        switch (type) {
+            case PAWN:
+                return 'P';
+            case ROOK:
+                return 'R';
+            case KNIGHT:
+                return 'N';
+            case BISHOP:
+                return 'B';
+            case QUEEN:
+                return 'Q';
+            case KING:
+                return 'K';
+            default:
+                return '-';
+        }
     }
 
     public char toChar() {
