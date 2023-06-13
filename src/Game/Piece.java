@@ -75,4 +75,8 @@ public class Piece {
         if (color == Color.WHITE) return Character.toLowerCase(toCharPiece());
         return toCharPiece();
     }
+
+    public String toString() {
+        return toChar() + "";
+    }
 }

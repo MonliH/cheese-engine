@@ -1,8 +1,6 @@
 package Game;
 
-import jdk.dynalink.linker.support.Lookup;
-
-import static Game.Piece.Type.*;
+import java.util.ArrayList;
 
 public class Board {
     private long blackPawns;
@@ -78,8 +76,58 @@ public class Board {
         return bitmaskToPiece(1L << (rank * 8 + file));
     }
 
+    public void makeMove(Move move) {
+        Piece piece = getPiece(move.from);
+        setPiece(move.from, null);
+        setPiece(move.to, piece);
+    }
+
+    private long getBitmaskForPiece(Piece piece) {
+        if (piece.isWhite()) {
+            switch (piece.getType()) {
+                case KING -> {return whiteKing;}
+                case QUEEN ->{ return whiteQueens;}
+                case ROOK ->{ return whiteRooks;}
+                case BISHOP ->{ return whiteBishops;}
+                case KNIGHT ->{ return whiteKnights;}
+                case PAWN ->{ return whitePawns;}
+            }
+        } else {
+            switch (piece.getType()) {
+                case KING -> {
+                    return blackKing;
+                }
+                case QUEEN -> {return blackQueens;}
+                case ROOK -> {return blackRooks;}
+                case BISHOP -> {return blackBishops;}
+                case KNIGHT -> {return blackKnights;}
+                case PAWN -> {return blackPawns;}
+            }
+        }
+
+        return 0;
+    }
+
     public void setPiece(Square square, Piece piece) {
         long bitmask = square.toBitmask();
+        whiteKing &= ~bitmask;
+        whiteQueens &= ~bitmask;
+        whiteRooks &= ~bitmask;
+        whiteBishops &= ~bitmask;
+        whiteKnights &= ~bitmask;
+        whitePawns &= ~bitmask;
+
+        blackKing &= ~bitmask;
+        blackQueens &= ~bitmask;
+        blackRooks &= ~bitmask;
+        blackBishops &= ~bitmask;
+        blackKnights &= ~bitmask;
+        blackPawns &= ~bitmask;
+
+        if (piece == null) {
+            return;
+        }
+
         if (piece.isWhite()) {
             switch (piece.getType()) {
                 case KING -> whiteKing |= bitmask;
@@ -153,16 +201,16 @@ public class Board {
         return null;
     }
 
-    private long occupied() {
+    public long occupied() {
         return blackRooks | blackKnights | blackBishops | blackQueens | blackKing | blackPawns |
                 whiteRooks | whiteKnights | whiteBishops | whiteQueens | whiteKing | whitePawns;
     }
 
-    private long occupiedWhite() {
+    public long occupiedWhite() {
         return whiteRooks | whiteKnights | whiteBishops | whiteQueens | whiteKing | whitePawns;
     }
 
-    private long occupiedBlack() {
+    public long occupiedBlack() {
         return blackRooks | blackKnights | blackBishops | blackQueens | blackKing | blackPawns;
     }
 
@@ -231,24 +279,24 @@ public class Board {
         }
     }
 
-    private long getPawnMoves(Game.Piece.Color color, Square position) {
+    private long getPawnMoves(Piece.Color color, Square position) {
         long positionBitmask = position.toBitmask();
         long moves;
         long captures;
-        if (color.equals(Game.Piece.Color.WHITE))  {
+        if (color.equals(Piece.Color.WHITE))  {
             boolean canMoveTwo = (positionBitmask & Rank.TWO) != 0;
-            moves = moveNorth(positionBitmask);
+            moves = moveNorth(positionBitmask) & ~occupied();
             if (canMoveTwo) {
-                moves |= moveNorth(moves);
+                moves |= moveNorth(moves) & ~occupied();
             }
             // capture
             captures = moveNorth(moveEast(positionBitmask)) & occupiedBlack();
             captures |= moveNorth(moveWest(positionBitmask)) & occupiedBlack();
         } else {
             boolean canMoveTwo = (positionBitmask & Rank.SEVEN) != 0;
-            moves = moveSouth(positionBitmask);
+            moves = moveSouth(positionBitmask) & ~occupied();
             if (canMoveTwo) {
-                moves |= moveSouth(moves);
+                moves |= moveSouth(moves) & ~occupied();
             }
             // capture
             captures = moveSouth(moveEast(positionBitmask)) & occupiedWhite();
@@ -289,8 +337,10 @@ public class Board {
         attacks |= SWAttacks;
         if ((SWAttacks & blockers) != 0) {
             int blockerLocation = 63-Long.numberOfLeadingZeros(SWAttacks & blockers & notAtPosition);
-            attacks &= ~LookUpTables.instance.moveMasks[LookUpTables.Direction.SOUTH_WEST.id][blockerLocation];
-            attacks |= 1L << blockerLocation;
+            if (blockerLocation>=0) {
+                attacks &= ~LookUpTables.instance.moveMasks[LookUpTables.Direction.SOUTH_WEST.id][blockerLocation];
+                attacks |= 1L << blockerLocation;
+            }
         }
 
         // southeast
@@ -298,8 +348,10 @@ public class Board {
         attacks |= SEAttacks;
         if ((SEAttacks & blockers) != 0) {
             int blockerLocation = 63-Long.numberOfLeadingZeros(SEAttacks & blockers & notAtPosition);
-            attacks &= ~LookUpTables.instance.moveMasks[LookUpTables.Direction.SOUTH_EAST.id][blockerLocation];
-            attacks |= 1L << blockerLocation;
+            if (blockerLocation>=0) {
+                attacks &= ~LookUpTables.instance.moveMasks[LookUpTables.Direction.SOUTH_EAST.id][blockerLocation];
+                attacks |= 1L << blockerLocation;
+            }
         }
 
         return attacks;
@@ -374,5 +426,52 @@ public class Board {
                 moveEast(moveEast(moveSouth(start))) | moveWest(moveWest(moveSouth(start))) |
                 moveNorth(moveNorth(moveEast(start))) | moveNorth(moveNorth(moveWest(start))) |
                 moveSouth(moveSouth(moveEast(start))) | moveSouth(moveSouth(moveWest(start)));
+    }
+
+    public ArrayList<Move> generatePieceMoves(Piece piece, long illegalSquares) {
+        ArrayList<Move> moves = new ArrayList<>();
+        long bitboard = getBitmaskForPiece(piece);
+
+        int index = 0;
+        while (bitboard != 0) {
+            if ((bitboard & 1L) == 1L) {
+                // there is a piece here at index
+                Square from = LookUpTables.instance.squares[index];
+                long toBitboard = getMoves(piece, from) & ~illegalSquares;
+                int toIndex = 0;
+                while (toBitboard != 0) {
+                    if ((toBitboard & 1L) == 1L) {
+                        moves.add(LookUpTables.instance.moves[index][toIndex]);
+                    }
+                    toIndex++;
+                    toBitboard >>>= 1;
+                }
+            }
+            index++;
+            bitboard >>>= 1;
+        }
+        return moves;
+    }
+
+    public ArrayList<Move> generateMovesWhite() {
+        ArrayList<Move> moves = new ArrayList<>();
+        moves.addAll(generatePieceMoves(Piece.WhitePawn, occupiedWhite()));
+        moves.addAll(generatePieceMoves(Piece.WhiteKnight, occupiedWhite()));
+        moves.addAll(generatePieceMoves(Piece.WhiteBishop, occupiedWhite()));
+        moves.addAll(generatePieceMoves(Piece.WhiteRook, occupiedWhite()));
+        moves.addAll(generatePieceMoves(Piece.WhiteQueen, occupiedWhite()));
+        moves.addAll(generatePieceMoves(Piece.WhiteKing, occupiedWhite()));
+        return moves;
+    }
+
+    public ArrayList<Move> generateMovesBlack() {
+        ArrayList<Move> moves = new ArrayList<>();
+        moves.addAll(generatePieceMoves(Piece.BlackPawn, occupiedBlack()));
+        moves.addAll(generatePieceMoves(Piece.BlackKnight, occupiedBlack()));
+        moves.addAll(generatePieceMoves(Piece.BlackBishop, occupiedBlack()));
+        moves.addAll(generatePieceMoves(Piece.BlackRook, occupiedBlack()));
+        moves.addAll(generatePieceMoves(Piece.BlackQueen, occupiedBlack()));
+        moves.addAll(generatePieceMoves(Piece.BlackKing, occupiedBlack()));
+        return moves;
     }
 }

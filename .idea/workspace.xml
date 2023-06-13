@@ -5,14 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20c0535a-d932-4125-a35d-b2a70a38bf9f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Game/File.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Game/Game.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Game/LookUpTables.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Game/Move.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Game/Rank.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cheese-engine.iml" beforeDir="false" afterPath="$PROJECT_DIR$/cheese-engine.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/LookUpTables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/LookUpTables.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Move.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Piece.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game/Square.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Square.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
@@ -39,27 +36,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "create.test.in.the.same.root": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;create.test.in.the.same.root&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -91,7 +88,10 @@
       <workItem from="1686066996937" duration="4565000" />
       <workItem from="1686153500809" duration="4985000" />
       <workItem from="1686189463527" duration="1000" />
-      <workItem from="1686191939173" duration="3089000" />
+      <workItem from="1686191939173" duration="3125000" />
+      <workItem from="1686239997087" duration="4277000" />
+      <workItem from="1686586470420" duration="4791000" />
+      <workItem from="1686621108604" duration="4788000" />
     </task>
     <servers />
   </component>

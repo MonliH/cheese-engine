@@ -4,6 +4,8 @@ public class Move {
     public Square from;
     public Square to;
 
+    private Move() {}
+
     public Move(Square from, Square to) {
         this.from = from;
         this.to = to;
@@ -16,5 +18,9 @@ public class Move {
     public void apply(Board board) {
         board.setPiece(to, board.getPiece(from));
         board.setPiece(from, null);
+    }
+
+    public String toString() {
+        return from + " -> " + to;
     }
 }

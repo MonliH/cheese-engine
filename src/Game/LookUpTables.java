@@ -3,7 +3,9 @@ package Game;
 public class LookUpTables {
     public static LookUpTables instance = new LookUpTables();
 
-    public long[][] moveMasks;
+    public final long[][] moveMasks;
+    public final Square[] squares;
+    public final Move[][] moves;
 
     public enum Direction {
         NORTH(0),
@@ -25,6 +27,20 @@ public class LookUpTables {
     LookUpTables() {
         // build a table
         moveMasks = new long[8][65];
+        squares = new Square[64];
+
+        for (int rank = 0; rank < 8; rank++) {
+            for (int file = 0; file < 8; file++) {
+                squares[rank * 8 + file] = new Square(rank, file);
+            }
+        }
+
+        moves = new Move[64][64];
+        for (int from = 0; from < 64; from++) {
+            for (int to = 0; to < 64; to++) {
+                moves[from][to] = new Move(squares[from], squares[to]);
+            }
+        }
 
         for (int rank = 0; rank < 8; rank++) {
             for (int file = 0; file < 8; file++) {

@@ -12,4 +12,7 @@ public class Square {
     public long toBitmask() {
         return 1L << (rank * 8 + file);
     }
+    public String toString() {
+        return Character.toString((char)('a' + file)) + (rank + 1);
+    }
 }
