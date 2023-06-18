@@ -82,6 +82,22 @@ public class Board {
         setPiece(move.to, piece);
     }
 
+    public void clearBoard() {
+        blackPawns = 0;
+        blackRooks = 0;
+        blackKnights = 0;
+        blackBishops = 0;
+        blackQueens = 0;
+        blackKing = 0;
+
+        whitePawns = 0;
+        whiteRooks = 0;
+        whiteKnights = 0;
+        whiteBishops = 0;
+        whiteQueens = 0;
+        whiteKing = 0;
+    }
+
     private long getBitmaskForPiece(Piece piece) {
         if (piece.isWhite()) {
             switch (piece.getType()) {
@@ -453,6 +469,25 @@ public class Board {
         return moves;
     }
 
+    public long generateAttackedSquares(Piece piece, long illegalSquares) {
+        long attacks = 0L;
+
+        long bitboard = getBitmaskForPiece(piece);
+        int index = 0;
+
+        while (bitboard != 0) {
+            if ((bitboard & 1L) == 1L) {
+                // there is a piece here at index
+                Square from = LookUpTables.instance.squares[index];
+                attacks |= getMoves(piece, from) & ~illegalSquares;
+            }
+            index++;
+            bitboard >>>= 1;
+        }
+
+        return attacks;
+    }
+
     public ArrayList<Move> generateMovesWhite() {
         ArrayList<Move> moves = new ArrayList<>();
         moves.addAll(generatePieceMoves(Piece.WhitePawn, occupiedWhite()));
@@ -473,5 +508,84 @@ public class Board {
         moves.addAll(generatePieceMoves(Piece.BlackQueen, occupiedBlack()));
         moves.addAll(generatePieceMoves(Piece.BlackKing, occupiedBlack()));
         return moves;
+    }
+
+    public long blackAttackingSquares() {
+        long attacks = 0L;
+        attacks |= generateAttackedSquares(Piece.BlackPawn, occupiedBlack());
+        attacks |= generateAttackedSquares(Piece.BlackKnight, occupiedBlack());
+        attacks |= generateAttackedSquares(Piece.BlackBishop, occupiedBlack());
+        attacks |= generateAttackedSquares(Piece.BlackRook, occupiedBlack());
+        attacks |= generateAttackedSquares(Piece.BlackQueen, occupiedBlack());
+        attacks |= generateAttackedSquares(Piece.BlackKing, occupiedBlack());
+        return attacks;
+    }
+
+    public long whiteAttackingSquares() {
+        long attacks = 0L;
+        attacks |= generateAttackedSquares(Piece.WhitePawn, occupiedWhite());
+        attacks |= generateAttackedSquares(Piece.WhiteKnight, occupiedWhite());
+        attacks |= generateAttackedSquares(Piece.WhiteBishop, occupiedWhite());
+        attacks |= generateAttackedSquares(Piece.WhiteRook, occupiedWhite());
+        attacks |= generateAttackedSquares(Piece.WhiteQueen, occupiedWhite());
+        attacks |= generateAttackedSquares(Piece.WhiteKing, occupiedWhite());
+        return attacks;
+    }
+
+    public boolean whiteKingInCheck() {
+        return (blackAttackingSquares() & whiteKing) != 0L;
+    }
+
+    public boolean blackKingInCheck() {
+        return (whiteAttackingSquares() & blackKing) != 0L;
+    }
+
+    public int queenDelta() {
+        int numWhiteQueens = Long.bitCount(whiteQueens) - Long.bitCount(blackQueens);
+        return numWhiteQueens;
+    }
+
+    public int rookDelta() {
+        int numWhiteRooks = Long.bitCount(whiteRooks) - Long.bitCount(blackRooks);
+        return numWhiteRooks;
+    }
+
+    public int bishopDelta() {
+        int numWhiteBishops = Long.bitCount(whiteBishops) - Long.bitCount(blackBishops);
+        return numWhiteBishops;
+    }
+
+    public int knightDelta() {
+        int numWhiteKnights = Long.bitCount(whiteKnights) - Long.bitCount(blackKnights);
+        return numWhiteKnights;
+    }
+
+    public int pawnDelta() {
+        int numWhitePawns = Long.bitCount(whitePawns) - Long.bitCount(blackPawns);
+        return numWhitePawns;
+    }
+
+    public static Board loadFromFen(String fen) {
+        Board board = new Board();
+        board.clearBoard();
+        String boardPosition = fen.split(" ")[0];
+        int rank = 7;
+        for (String line : boardPosition.split("/")) {
+            int file = 0;
+            for (int i=0;i<line.length();i++) {
+                char piece = line.charAt(i);
+                if (Character.isDigit(piece)) {
+                    file += Character.getNumericValue(piece);
+                } else {
+                    Piece pieceType = Piece.fromChar(piece);
+                    System.out.println(file + " rank: " + rank + " file: " + file + " value: " + piece);
+                    Square square = LookUpTables.instance.squares[rank * 8 + file];
+                    board.setPiece(square, pieceType);
+                    file++;
+                }
+            }
+            rank--;
+        }
+        return board;
     }
 }

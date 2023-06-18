@@ -47,7 +47,6 @@ public class Game {
             throw new IllegalArgumentException("No piece at " + move.from);
         }
         if (movedPiece.isWhite() != whiteTurn) {
-            System.out.println(board);
             throw new IllegalArgumentException("Wrong color piece at " + move.from);
         }
 
@@ -102,8 +101,6 @@ public class Game {
         return board.toString();
     }
 
-    private static int counter = 0;
-
     public int searchVariations(short depth) {
         if (depth == 0) {
             return 1;
@@ -113,10 +110,63 @@ public class Game {
 
         for (Move m:legalMoves()) {
             makeMove(m);
+            if (whiteTurn ? board.blackKingInCheck() : board.whiteKingInCheck()) {
+                // Illegal move
+                undoMove(m);
+                continue;
+            }
             total += searchVariations((short) (depth - 1));
             undoMove(m);
         }
 
         return total;
+    }
+
+    private boolean hasValidMove() {
+        for (Move m : legalMoves()) {
+            makeMove(m);
+
+            // use other color because makeMove changes color
+            boolean stillInCheck = whiteTurn ? board.blackKingInCheck() : board.whiteKingInCheck();
+
+            undoMove(m);
+            if (!stillInCheck) {
+                // valid move to move out of check
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isCheckmate() {
+        boolean isInCheck = whiteTurn ? board.whiteKingInCheck() : board.blackKingInCheck();
+        return isInCheck && !hasValidMove();
+    }
+
+    public boolean isDraw() {
+        boolean isInCheck = whiteTurn ? board.whiteKingInCheck() : board.blackKingInCheck();
+        return !isInCheck && !hasValidMove();
+    }
+
+    public GameResult gameResult() {
+        boolean isInCheck = whiteTurn ? board.whiteKingInCheck() : board.blackKingInCheck();
+        boolean hasValidMove = hasValidMove();
+
+        if (isInCheck && !hasValidMove) {
+            return whiteTurn ? GameResult.BLACK_WINS : GameResult.WHITE_WINS;
+        } else if (!isInCheck && !hasValidMove) {
+            return GameResult.DRAW;
+        } else {
+            return GameResult.IN_PROGRESS;
+        }
+    }
+
+    public static Game boardFromFen(String fen){
+        Game g = new Game();
+        Board board = Board.loadFromFen(fen);
+        g.board = board;
+        g.whiteTurn = fen.split(" ")[1].equals("w");
+        return g;
     }
 }

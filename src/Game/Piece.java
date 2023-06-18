@@ -39,6 +39,25 @@ public class Piece {
         this.type = type;
     }
 
+    public int ordinal() {
+        switch (type) {
+            case PAWN:
+                return 0;
+            case ROOK:
+                return 1;
+            case KNIGHT:
+                return 2;
+            case BISHOP:
+                return 3;
+            case QUEEN:
+                return 4;
+            case KING:
+                return 5;
+            default:
+                return -1;
+        }
+    }
+
     public Color getColor() {
         return color;
     }
@@ -78,5 +97,36 @@ public class Piece {
 
     public String toString() {
         return toChar() + "";
+    }
+
+    public static Piece fromChar(char c) {
+        switch (c) {
+            case 'P':
+                return WhitePawn;
+            case 'R':
+                return WhiteRook;
+            case 'N':
+                return WhiteKnight;
+            case 'B':
+                return WhiteBishop;
+            case 'Q':
+                return WhiteQueen;
+            case 'K':
+                return WhiteKing;
+            case 'p':
+                return BlackPawn;
+            case 'r':
+                return BlackRook;
+            case 'n':
+                return BlackKnight;
+            case 'b':
+                return BlackBishop;
+            case 'q':
+                return BlackQueen;
+            case 'k':
+                return BlackKing;
+            default:
+                return null;
+        }
     }
 }

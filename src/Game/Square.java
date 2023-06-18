@@ -15,4 +15,12 @@ public class Square {
     public String toString() {
         return Character.toString((char)('a' + file)) + (rank + 1);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        if (!(other instanceof Square)) return false;
+        Square s = (Square) other;
+        return s.rank == rank && s.file == file;
+    }
 }
