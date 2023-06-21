@@ -70,6 +70,9 @@ public class Piece {
         return color == Color.WHITE;
     }
 
+    /**
+     * Convert a piece to a character. Returns '-' if the piece is null.
+     */
     public char toCharPiece() {
         // above using switch statement
         switch (type) {
@@ -99,6 +102,10 @@ public class Piece {
         return toChar() + "";
     }
 
+    /**
+     * Convert a character to a piece. Returns null if the character is not a valid piece.
+     * Capital letters are white and lowercase letters are black.
+     */
     public static Piece fromChar(char c) {
         switch (c) {
             case 'P':

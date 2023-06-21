@@ -57,7 +57,7 @@ public class UCI {
                 if (tokens.length > 1 && tokens[1].equals("depth")) {
                     depth = Integer.parseInt(tokens[2]);
                 }
-                Move move = engine.bestMove(engine.getCurrentGame(), depth);
+                Move move = engine.bestMove(engine.getCurrentGame(), depth, true);
                 if (move == null) {
                     System.out.println("bestmove null");
                     continue;

@@ -6,6 +6,9 @@ import Game.GameResult;
 import java.util.Scanner;
 
 public class CLIGame {
+    /**
+     * Start a game of chess using the command line. Will get moves from the given players.
+     */
     public static void start(Player white, Player black) {
         System.out.println("Welcome to Chess!");
 

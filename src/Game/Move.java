@@ -1,15 +1,21 @@
 package Game;
 
+/**
+ * Represents a move in the game. A move is a pair of squares, the square the piece is moving from and the square the
+ * piece is moving to.
+ */
 public class Move {
     public Square from;
     public Square to;
 
-    private Move() {}
-
+    /**
+     * Creates a move from one square to another.
+     */
     public Move(Square from, Square to) {
         this.from = from;
         this.to = to;
     }
+
     public Move(int fromRank, int fromFile, int toRank, int toFile) {
         this.from = new Square(fromRank, fromFile);
         this.to = new Square(toRank, toFile);
@@ -28,6 +34,12 @@ public class Move {
         return "" + from + to;
     }
 
+    /**
+     * Parses a move from a string. The string should be in the format "a1b2" or "a1-b2" (case insensitive).
+     *
+     * @param stringMove the string to parse in the
+     * @return parsed move, or null if the string is not a valid move
+     */
     public static Move parseMove(String stringMove) {
         stringMove = stringMove.toLowerCase();
         stringMove  = stringMove.replaceAll("\\s+|-","");

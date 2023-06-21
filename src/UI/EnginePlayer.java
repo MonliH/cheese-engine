@@ -4,6 +4,9 @@ import Engine.Engine;
 import Game.Game;
 import Game.Move;
 
+/**
+ * A player that uses the engine to make moves.
+ */
 public class EnginePlayer extends Player {
     Engine engine;
     public EnginePlayer() {
@@ -11,7 +14,8 @@ public class EnginePlayer extends Player {
     }
 
     public Move getMove(Game game) {
-        return engine.bestMove(game, 5);
+        System.out.println("Engine is thinking...");
+        return engine.bestMove(game, 5, false);
     }
 
     public String getName() {

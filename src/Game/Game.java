@@ -92,6 +92,9 @@ public class Game {
         return total;
     }
 
+    /**
+     * Checks if the current player has a valid move or not.
+     */
     private boolean hasValidMove() {
         for (Move m : legalMoves()) {
             makeMove(m);
@@ -109,16 +112,27 @@ public class Game {
         return false;
     }
 
+    /**
+     * Check if the current player is in checkmate.
+     */
     public boolean isCheckmate() {
         boolean isInCheck = whiteTurn ? board.whiteKingInCheck() : board.blackKingInCheck();
         return isInCheck && !hasValidMove();
     }
 
+    /**
+     * Check if the current position is a stalemate.
+     */
     public boolean isDraw() {
         boolean isInCheck = whiteTurn ? board.whiteKingInCheck() : board.blackKingInCheck();
         return !isInCheck && !hasValidMove();
     }
 
+    /**
+     * Get the result of the game (black or white wins, draw, or in progress).
+     *
+     * @return the result of the game
+     */
     public GameResult gameResult() {
         boolean isInCheck = whiteTurn ? board.whiteKingInCheck() : board.blackKingInCheck();
         boolean hasValidMove = hasValidMove();
@@ -132,6 +146,9 @@ public class Game {
         }
     }
 
+    /**
+     * Create a game from a FEN string.
+     */
     public static Game boardFromFen(String fen){
         Game g = new Game();
         Board board = Board.loadFromFen(fen);

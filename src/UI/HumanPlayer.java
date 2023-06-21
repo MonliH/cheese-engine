@@ -6,6 +6,9 @@ import Game.Move;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * A player that makes moves based on user input.
+ */
 public class HumanPlayer extends Player {
     public Move getMove(Game game) {
         Scanner inp = new Scanner(System.in);
@@ -23,6 +26,7 @@ public class HumanPlayer extends Player {
             if (move == null) continue;
 
             try {
+                // Get all legal moves and check if the move is in this list (if not, it's illegal)
                 ArrayList<Move> m = game.legalMoves();
 
                 if (!m.contains(move)) {
@@ -32,6 +36,7 @@ public class HumanPlayer extends Player {
                 }
 
                 game.makeMove(move);
+                // If the move puts the player in check, it's illegal
                 boolean isIllegal = game.isWhiteTurn() ? game.board.blackKingInCheck() : game.board.whiteKingInCheck();
                 game.undoMove(move);
 

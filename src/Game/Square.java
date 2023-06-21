@@ -1,5 +1,8 @@
 package Game;
 
+/**
+ * A square on the chess board.
+ */
 public class Square {
     public int rank;
     public int file;

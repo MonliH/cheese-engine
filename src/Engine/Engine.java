@@ -141,9 +141,10 @@ public class Engine {
      *
      * @param game The current game state.
      * @param depth The depth to search to.
+     * @param showUciInfo Whether to print info for universal chess interface or not (e.g., the depth and evaluation).
      * @return The best move.
      */
-    public Move bestMove(Game game, int depth) {
+    public Move bestMove(Game game, int depth, boolean showUciInfo) {
         currentGame = game;
 
         // Store the best move
@@ -179,7 +180,9 @@ public class Engine {
         }
 
         // Print info for universal chess interface (depth and score)
-        System.out.println("info depth " + depth + " score cp " + alpha);
+        if (showUciInfo) {
+            System.out.println("info depth " + depth + " score cp " + alpha);
+        }
 
         return bestMove;
     }

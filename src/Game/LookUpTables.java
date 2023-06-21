@@ -1,12 +1,18 @@
 package Game;
 
 public class LookUpTables {
+    // Helper lookup classes to prevent unnecessary object construction during search.
     public static LookUpTables instance = new LookUpTables();
 
     public final long[][] moveMasks;
+
+    // Pre-existing for every square and move possible (to prevent unnecessary object allocations)
     public final Square[] squares;
     public final Move[][] moves;
 
+    /**
+     * Cardinal directions on the board.
+     */
     public enum Direction {
         NORTH(0),
         EAST(1),
@@ -25,16 +31,18 @@ public class LookUpTables {
     }
 
     LookUpTables() {
-        // build a table
+        // Build lookup for
         moveMasks = new long[8][65];
         squares = new Square[64];
 
+        // Initialize squares
         for (int rank = 0; rank < 8; rank++) {
             for (int file = 0; file < 8; file++) {
                 squares[rank * 8 + file] = new Square(rank, file);
             }
         }
 
+        // Initialize moves
         moves = new Move[64][64];
         for (int from = 0; from < 64; from++) {
             for (int to = 0; to < 64; to++) {
@@ -42,6 +50,7 @@ public class LookUpTables {
             }
         }
 
+        // Move masks for each direction (used for move generation)
         for (int rank = 0; rank < 8; rank++) {
             for (int file = 0; file < 8; file++) {
                 long mask = 0;
