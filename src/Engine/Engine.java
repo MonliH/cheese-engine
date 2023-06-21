@@ -14,60 +14,34 @@ import java.util.HashMap;
 public class Engine {
     private Game currentGame;
 
+    /**
+     * Set the current game that the engine is playing.
+     *
+     * @param game
+     */
     public void setCurrentGame(Game game) {
         currentGame = game;
     }
 
+    /**
+     * Get the game that the engine is playing.
+     *
+     * @return the current game
+     */
     public Game getCurrentGame() {
         return currentGame;
     }
 
     /**
-     * Sort the moves by their weight, so that the engine can search the moves that are likely to be good first.
+     * Sort the moves (in place) by their weight, so that the engine can search the moves that are likely to
+     * be good first.
+     *
      * @param moves
      */
     private void sortMoves(ArrayList<Move> moves) {
         Collections.sort(moves, (o1, o2) ->
                 Evaluation.eval[currentGame.board.getPiece(o2.from).ordinal()]
                         - Evaluation.eval[currentGame.board.getPiece(o1.from).ordinal()]);
-    }
-
-    /**
-     * Performs a quiescence search to avoid the horizon effect, where the engine might make a bad move because
-     * it doesn't see.
-     */
-    private int quiesce(int alpha, int beta) {
-        int currentEval = Evaluation.evaluate(currentGame);
-        if (currentEval >= beta) {
-            return beta;
-        }
-        if (alpha < currentEval) {
-            alpha = currentEval;
-        }
-
-        ArrayList<Move> moves = currentGame.legalMoves();
-        sortMoves(moves);
-        for (Move move: moves) {
-            if (currentGame.board.getPiece(move.to) != null) {
-                currentGame.makeMove(move);
-                boolean isIllegal = currentGame.isWhiteTurn() ? currentGame.board.blackKingInCheck() : currentGame.board.whiteKingInCheck();
-                if (isIllegal) {
-                    currentGame.undoMove(move);
-                    continue;
-                }
-                int score = -quiesce(-beta, -alpha);
-                currentGame.undoMove(move);
-
-                if (score >= beta) {
-                    return beta;
-                }
-                if (score > alpha) {
-                    alpha = score;
-                }
-            }
-        }
-
-        return alpha;
     }
 
     /**
@@ -123,7 +97,48 @@ public class Engine {
     }
 
     /**
+     * Performs a quiescence search to avoid the horizon effect, where the engine might make a bad move because
+     * it doesn't see.
+     */
+    private int quiesce(int alpha, int beta) {
+        //
+        int currentEval = Evaluation.evaluate(currentGame);
+        if (currentEval >= beta) {
+            return beta;
+        }
+        if (alpha < currentEval) {
+            alpha = currentEval;
+        }
+
+        ArrayList<Move> moves = currentGame.legalMoves();
+        sortMoves(moves);
+        for (Move move: moves) {
+            if (currentGame.board.getPiece(move.to) != null) {
+                currentGame.makeMove(move);
+                boolean isIllegal = currentGame.isWhiteTurn() ? currentGame.board.blackKingInCheck() : currentGame.board.whiteKingInCheck();
+                if (isIllegal) {
+                    currentGame.undoMove(move);
+                    continue;
+                }
+                int score = -quiesce(-beta, -alpha);
+                currentGame.undoMove(move);
+
+                if (score >= beta) {
+                    return beta;
+                }
+                if (score > alpha) {
+                    alpha = score;
+                }
+            }
+        }
+
+        return alpha;
+    }
+
+
+    /**
      * Returns the best move for the current game state.
+     *
      * @param game The current game state.
      * @param depth The depth to search to.
      * @return The best move.

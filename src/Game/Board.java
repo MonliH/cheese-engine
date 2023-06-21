@@ -3,21 +3,43 @@ package Game;
 import java.util.ArrayList;
 
 public class Board {
+    /*
+     We store the board as a bitboard, which is a 64-bit integer (long) that has a 1 where there is a
+     piece and 0 where there is not. We use bitboards here for performance reasons.
+
+     The least significant bit of the long is the bottom left square, and the most significant bit is the top right
+     square. For example, the integer 00100100 00000000 00000000 00000000 00000000 00000000 00000000 01000010 translates to:
+
+     8 | 0 0 1 0 0 1 0 0
+     7 | 0 0 0 0 0 0 0 0
+     6 | 0 0 0 0 0 0 0 0
+     5 | 0 0 0 0 0 0 0 0
+     4 | 0 0 0 0 0 0 0 0
+     3 | 0 0 0 0 0 0 0 0
+     2 | 0 0 0 0 0 0 0 0
+     1 | 0 1 0 0 0 0 1 0
+     -------------------
+         a b c d e f g h
+
+     Because we can only store a 1 or 0 for each spot, we need to use 12 longs to store the board, one for each
+     piece and color.
+    */
     private long blackPawns;
     private long blackRooks;
     private long blackKnights;
-    private long blackBishops;
+    public long blackBishops;
     private long blackQueens;
     private long blackKing;
 
     private long whitePawns;
     private long whiteRooks;
-    private long whiteKnights;
+    public long whiteKnights;
     private long whiteBishops;
     private long whiteQueens;
     private long whiteKing;
 
     public Board(){
+        // Initialize the board to the starting position
         setPiece(new Square(0, 0), Piece.WhiteRook);
         setPiece(new Square(0, 1), Piece.WhiteKnight);
         setPiece(new Square(0, 2), Piece.WhiteBishop);
@@ -36,20 +58,29 @@ public class Board {
         setPiece(new Square(7, 6), Piece.BlackKnight);
         setPiece(new Square(7, 7), Piece.BlackRook);
 
+        // Pawns
         for (int i = 0; i < 8; i++) {
             setPiece(new Square(1, i), Piece.WhitePawn);
             setPiece(new Square(6, i), Piece.BlackPawn);
         }
     }
 
+    /**
+     * Convert the board to a string. Capital letters are black pieces, lowercase letters are white pieces.
+     *
+     * @return the board as a string
+     */
     public String toString() {
         StringBuilder result = new StringBuilder();
+
+        // Row-major ordering
         for (int i = 7; i >= 0; i--) {
             result.append(i+1);
             result.append(" | ");
             for (int j = 0; j < 8; j++) {
                 Piece p = getPiece(i, j);
                 if (p == null) {
+                    // No piece
                     result.append("-");
                 } else {
                     result.append(p.toChar());
@@ -59,6 +90,7 @@ public class Board {
             result.append("\n");
         }
 
+        // Add rank indicators to bottom
         result.append("-------------------\n");
         result.append("   ");
         for (int i = 0; i < 8; i++) {
@@ -68,20 +100,38 @@ public class Board {
         return result.toString();
     }
 
+    /**
+     * Get the piece at a square
+     * @param square piece position
+     * @return the piece at the square
+     */
     public Piece getPiece(Square square) {
         return bitmaskToPiece(square.toBitmask());
     }
 
+    /**
+     * Get the piece at a square
+     * @param rank rank of the square
+     * @param file file of the square
+     * @return the piece at the square
+     */
     public Piece getPiece(int rank, int file) {
         return bitmaskToPiece(1L << (rank * 8 + file));
     }
 
+    /**
+     * Make a move
+     * @param move move to make
+     */
     public void makeMove(Move move) {
         Piece piece = getPiece(move.from);
         setPiece(move.from, null);
         setPiece(move.to, piece);
     }
 
+    /**
+     * Reset the board
+     */
     public void clearBoard() {
         blackPawns = 0;
         blackRooks = 0;
@@ -98,6 +148,11 @@ public class Board {
         whiteKing = 0;
     }
 
+    /**
+     * Get the corresponding bitmask for a piece
+     * @param piece to get bitmask for
+     * @return bitmask for the piece
+     */
     private long getBitmaskForPiece(Piece piece) {
         if (piece.isWhite()) {
             switch (piece.getType()) {
@@ -124,6 +179,11 @@ public class Board {
         return 0;
     }
 
+    /**
+     * Set a piece at a square
+     * @param square square to set piece at
+     * @param piece piece to set
+     */
     public void setPiece(Square square, Piece piece) {
         long bitmask = square.toBitmask();
         whiteKing &= ~bitmask;
@@ -165,6 +225,11 @@ public class Board {
         }
     }
 
+    /**
+     * Get the piece at a bitmask
+     * @param bitmask bitmask to get piece at
+     * @return the piece at the bitmask
+     */
     private Piece bitmaskToPiece(long bitmask) {
         if ((blackPawns & bitmask) != 0) {
             return Piece.BlackPawn;
@@ -217,20 +282,32 @@ public class Board {
         return null;
     }
 
+    /**
+     * Get the bitmask of all occupied squares
+     */
     public long occupied() {
         return blackRooks | blackKnights | blackBishops | blackQueens | blackKing | blackPawns |
                 whiteRooks | whiteKnights | whiteBishops | whiteQueens | whiteKing | whitePawns;
     }
 
+    /**
+     * Get the bitmask of all squares occupied by white
+     */
     public long occupiedWhite() {
         return whiteRooks | whiteKnights | whiteBishops | whiteQueens | whiteKing | whitePawns;
     }
 
+    /**
+     * Get the bitmask of all squares occupied by black
+     */
     public long occupiedBlack() {
         return blackRooks | blackKnights | blackBishops | blackQueens | blackKing | blackPawns;
     }
 
-    public static String printBitboard(long bitboard) {
+    /**
+     * Convert a bitboard to a string representation (for debugging purposes)
+     */
+    public static String bitboardToString(long bitboard) {
         StringBuilder result = new StringBuilder();
         for (int i = 7; i >= 0; i--) {
             result.append(i+1);
@@ -260,22 +337,37 @@ public class Board {
         return result.toString();
     }
 
+    /**
+     * Shift all bits in a bitboard one square north (up). Does not wrap.
+     */
     public static long moveNorth(long bitboard) {
         return bitboard << 8;
     }
 
+    /**
+     * Shift all bits in a bitboard one square south (down). Does not wrap.
+     */
     public static long moveSouth(long bitboard) {
         return bitboard >>> 8;
     }
 
+    /**
+     * Shift all bits in a bitboard one square east (right). Does not wrap.
+     */
     public static long moveEast(long bitboard) {
         return (bitboard & ~File.H) << 1;
     }
 
+    /**
+     * Shift all bits in a bitboard one square west (left). Does not wrap.
+     */
     public static long moveWest(long bitboard) {
         return (bitboard & ~File.A) >>> 1;
     }
 
+    /**
+     * Get the legal moves for a piece at a square as a bitmask.
+     */
     public long getMoves(Piece piece, Square position) {
         switch (piece.getType()) {
             case PAWN:
@@ -295,46 +387,86 @@ public class Board {
         }
     }
 
+    /**
+     * Get legal moves for a pawn at a square as a bitmask.
+     */
     private long getPawnMoves(Piece.Color color, Square position) {
         long positionBitmask = position.toBitmask();
         long moves;
         long captures;
         if (color.equals(Piece.Color.WHITE))  {
-            boolean canMoveTwo = (positionBitmask & Rank.TWO) != 0;
-            moves = moveNorth(positionBitmask) & ~occupied();
+            // White pawn
+            boolean canMoveTwo = (positionBitmask & Rank.TWO) != 0; // Make sure pawn is on second rank
+            moves = moveNorth(positionBitmask) & ~occupied(); // Pawn can move up if square is not occupied
             if (canMoveTwo) {
-                moves |= moveNorth(moves) & ~occupied();
+                moves |= moveNorth(moves) & ~occupied(); // Pawn can move two squares up if both squares are not occupied
             }
-            // capture
+            // Capture only if there is a piece occupied there of the opposite color
             captures = moveNorth(moveEast(positionBitmask)) & occupiedBlack();
             captures |= moveNorth(moveWest(positionBitmask)) & occupiedBlack();
         } else {
-            boolean canMoveTwo = (positionBitmask & Rank.SEVEN) != 0;
+            // Black pawn
+            boolean canMoveTwo = (positionBitmask & Rank.SEVEN) != 0; // Make sure pawn is on seventh rank
             moves = moveSouth(positionBitmask) & ~occupied();
             if (canMoveTwo) {
                 moves |= moveSouth(moves) & ~occupied();
             }
-            // capture
+            // Capture only if there is a piece occupied there of the opposite color
             captures = moveSouth(moveEast(positionBitmask)) & occupiedWhite();
             captures |= moveSouth(moveWest(positionBitmask)) & occupiedWhite();
         }
-        moves &= ~occupied();
-        moves |= captures;
+        moves &= ~occupied();  // Remove moves that are blocked by other pieces
+        moves |= captures;  // Add captures
 
         return moves;
     }
+
+    /**
+     * Get legal moves for a bishop at a square as a bitmask.
+     */
     private long getBishopMoves(Square position) {
+        /*
+         First, we get all possible moves in all directions, then we remove moves that are blocked by other pieces.
+         We have a lookup table that stores the possible moves of a bishop for each square in each direction. When
+         we encounter a piece, we remove all moves in that direction after that piece (also using the lookup table).
+
+         For example, consider the board position:
+         8 | - - - - - - - -
+         7 | - - - - - - - -
+         6 | - - - - - - - -
+         5 | - - - - - - - -
+         4 | - - - - b - - -
+         3 | - - - - - - - -
+         2 | - - P - - - - -
+         1 | - - - - - - - -
+         -------------------
+             a b c d e f g h
+
+         For the southwest direction, we build an attacks bitboard like this:
+         8 | 0 0 0 0 0 0 0 0      8 | 0 0 0 0 0 0 0 0     8 | 0 0 0 0 0 0 0 0
+         7 | 0 0 0 0 0 0 0 0      7 | 0 0 0 0 0 0 0 0     7 | 0 0 0 0 0 0 0 0
+         6 | 0 0 0 0 0 0 0 0      6 | 0 0 0 0 0 0 0 0     6 | 0 0 0 0 0 0 0 0
+         5 | 0 0 0 0 0 0 0 0      5 | 0 0 0 0 0 0 0 0     5 | 0 0 0 0 0 0 0 0
+         4 | 0 0 0 0 1 0 0 0  &~  4 | 0 0 0 0 0 0 0 0  =  4 | 0 0 0 0 1 0 0 0
+         3 | 0 0 0 1 0 0 0 0      3 | 0 0 0 0 0 0 0 0     3 | 0 0 0 1 0 0 0 0
+         2 | 0 0 1 0 0 0 0 0      2 | 0 0 1 0 0 0 0 0     2 | 0 0 0 0 0 0 0 0
+         1 | 0 1 0 0 0 0 0 0      1 | 0 1 0 0 0 0 0 0     1 | 0 0 0 0 0 0 0 0
+         -------------------      -------------------     -------------------
+             a b c d e f g h          a b c d e f g h         a b c d e f g h
+        */
         long positionBitmask = position.toBitmask();
         long notAtPosition = ~positionBitmask;
         int location = Long.numberOfTrailingZeros(positionBitmask);
 
         long attacks = 0L;
         long blockers = occupied();
+
         // northwest
         long NWAttacks = LookUpTables.instance.moveMasks[LookUpTables.Direction.NORTH_WEST.id][location];
         attacks |= NWAttacks;
         if ((NWAttacks & blockers) != 0) {
             int blockerLocation = Long.numberOfTrailingZeros(NWAttacks & blockers & notAtPosition);
+            // Remove all moves after the blocker
             attacks &= ~LookUpTables.instance.moveMasks[LookUpTables.Direction.NORTH_WEST.id][blockerLocation];
             if (blockerLocation != 64) attacks |= 1L << blockerLocation;
         }
@@ -373,14 +505,20 @@ public class Board {
         return attacks;
     }
 
+
+    /**
+     * Get legal moves for a rook at a square as a bitmask.
+     */
     private long getRookMoves(Square position) {
+        // Internally, this works the same way as getBishopMoves but the directions are NESW instead of diagonals
         long positionBitmask = position.toBitmask();
-        int location = Long.numberOfTrailingZeros(positionBitmask);
+        int location = Long.numberOfTrailingZeros(positionBitmask); // Position of the piece
         long notAtPosition = ~positionBitmask;
 
         long attacks = 0L;
         long blockers = occupied();
-        // north
+
+        // North
         long north = LookUpTables.instance.moveMasks[LookUpTables.Direction.NORTH.id][location];
         attacks |= north;
         if ((north & blockers) != 0) {
@@ -389,7 +527,7 @@ public class Board {
             if (blockerLocation != 64) attacks |= 1L << blockerLocation;
         }
 
-        // east
+        // East
         long east = LookUpTables.instance.moveMasks[LookUpTables.Direction.EAST.id][location];
         attacks |= east;
         if ((east & blockers) != 0) {
@@ -398,7 +536,7 @@ public class Board {
             if (blockerLocation != 64) attacks |= 1L << blockerLocation;
         }
 
-        // south
+        // South
         long south = LookUpTables.instance.moveMasks[LookUpTables.Direction.SOUTH.id][location];
         attacks |= south;
         if ((south & blockers) != 0) {
@@ -409,7 +547,7 @@ public class Board {
             }
         }
 
-        // west
+        // West
         long west = LookUpTables.instance.moveMasks[LookUpTables.Direction.WEST.id][location];
         attacks |= west;
         if ((west & blockers) != 0) {
@@ -423,27 +561,47 @@ public class Board {
         return attacks;
     }
 
+    /**
+     * Get legal moves for a queen at a square as a bitmask.
+     */
     private long getQueenMoves(Square position) {
+        // Queen moves are the union of bishop and rook moves
         return getBishopMoves(position) | getRookMoves(position);
     }
 
+    /**
+     * Get legal moves for a king at a square as a bitmask.
+     */
     private long getKingMoves(Square position) {
         long start = position.toBitmask();
         long east = moveEast(start);
         long west = moveWest(start);
         long north = moveNorth(start);
         long south = moveSouth(start);
+
+        // All eight directions
         return  east | west | north | south | moveNorth(east) | moveNorth(west) | moveSouth(east) | moveSouth(west);
     }
 
+    /**
+     * Get legal moves for a knight at a square as a bitmask.
+     */
     private long getKnightMoves(Square position) {
         long start = position.toBitmask();
+        // All eight directions
         return moveEast(moveEast(moveNorth(start))) | moveWest(moveWest(moveNorth(start))) |
                 moveEast(moveEast(moveSouth(start))) | moveWest(moveWest(moveSouth(start))) |
                 moveNorth(moveNorth(moveEast(start))) | moveNorth(moveNorth(moveWest(start))) |
                 moveSouth(moveSouth(moveEast(start))) | moveSouth(moveSouth(moveWest(start)));
     }
 
+    /**
+     * Get all the legal moves for a piece and color. Ignores checks. Can remove illegal moves by passing in a bitmask.
+     *
+     * @param piece type of piece to consider
+     * @param illegalSquares bitmask of illegal squares to move to (ones for illegal squares)
+     * @return list of legal moves
+     */
     public ArrayList<Move> generatePieceMoves(Piece piece, long illegalSquares) {
         ArrayList<Move> moves = new ArrayList<>();
         long bitboard = getBitmaskForPiece(piece);
@@ -469,6 +627,13 @@ public class Board {
         return moves;
     }
 
+    /**
+     * Get all attacked squares for a piece and color. Ignores checks. Can remove illegal squares by passing in a bitmask.
+     *
+     * @param piece
+     * @param illegalSquares
+     * @return list of attacked squares
+     */
     public long generateAttackedSquares(Piece piece, long illegalSquares) {
         long attacks = 0L;
 
@@ -488,6 +653,11 @@ public class Board {
         return attacks;
     }
 
+    /**
+     * Get all legal moves for white
+     *
+     * @return list of legal moves
+     */
     public ArrayList<Move> generateMovesWhite() {
         ArrayList<Move> moves = new ArrayList<>();
         moves.addAll(generatePieceMoves(Piece.WhitePawn, occupiedWhite()));
@@ -499,6 +669,11 @@ public class Board {
         return moves;
     }
 
+    /**
+     * Get all legal moves for black
+     *
+     * @return list of legal moves
+     */
     public ArrayList<Move> generateMovesBlack() {
         ArrayList<Move> moves = new ArrayList<>();
         moves.addAll(generatePieceMoves(Piece.BlackPawn, occupiedBlack()));
@@ -510,17 +685,11 @@ public class Board {
         return moves;
     }
 
-    public long blackAttackingSquares() {
-        long attacks = 0L;
-        attacks |= generateAttackedSquares(Piece.BlackPawn, occupiedBlack());
-        attacks |= generateAttackedSquares(Piece.BlackKnight, occupiedBlack());
-        attacks |= generateAttackedSquares(Piece.BlackBishop, occupiedBlack());
-        attacks |= generateAttackedSquares(Piece.BlackRook, occupiedBlack());
-        attacks |= generateAttackedSquares(Piece.BlackQueen, occupiedBlack());
-        attacks |= generateAttackedSquares(Piece.BlackKing, occupiedBlack());
-        return attacks;
-    }
-
+    /**
+     * Get all attacked squares for white
+     *
+     * @return bitboard of attacked squares
+     */
     public long whiteAttackingSquares() {
         long attacks = 0L;
         attacks |= generateAttackedSquares(Piece.WhitePawn, occupiedWhite());
@@ -532,6 +701,22 @@ public class Board {
         return attacks;
     }
 
+    /**
+     * Get all attacked squares for black
+     *
+     * @return bitboard of attacked squares
+     */
+    public long blackAttackingSquares() {
+        long attacks = 0L;
+        attacks |= generateAttackedSquares(Piece.BlackPawn, occupiedBlack());
+        attacks |= generateAttackedSquares(Piece.BlackKnight, occupiedBlack());
+        attacks |= generateAttackedSquares(Piece.BlackBishop, occupiedBlack());
+        attacks |= generateAttackedSquares(Piece.BlackRook, occupiedBlack());
+        attacks |= generateAttackedSquares(Piece.BlackQueen, occupiedBlack());
+        attacks |= generateAttackedSquares(Piece.BlackKing, occupiedBlack());
+        return attacks;
+    }
+
     public boolean whiteKingInCheck() {
         return (blackAttackingSquares() & whiteKing) != 0L;
     }
@@ -540,31 +725,55 @@ public class Board {
         return (whiteAttackingSquares() & blackKing) != 0L;
     }
 
+    /**
+     * Difference between the number of queens white has and the number of queens black has.
+     */
     public int queenDelta() {
         int numWhiteQueens = Long.bitCount(whiteQueens) - Long.bitCount(blackQueens);
         return numWhiteQueens;
     }
 
+    /**
+     * Difference between the number of rooks white has and the number of rooks black has.
+     */
     public int rookDelta() {
         int numWhiteRooks = Long.bitCount(whiteRooks) - Long.bitCount(blackRooks);
         return numWhiteRooks;
     }
 
+    /**
+     * Difference between the number of bishops white has and the number of bishops black has.
+     */
     public int bishopDelta() {
         int numWhiteBishops = Long.bitCount(whiteBishops) - Long.bitCount(blackBishops);
         return numWhiteBishops;
     }
 
+    /**
+     * Difference between the number of knights white has and the number of knights black has.
+     */
     public int knightDelta() {
         int numWhiteKnights = Long.bitCount(whiteKnights) - Long.bitCount(blackKnights);
         return numWhiteKnights;
     }
 
+    /**
+     * Difference between the number of pawns white has and the number of pawns black has.
+     */
     public int pawnDelta() {
         int numWhitePawns = Long.bitCount(whitePawns) - Long.bitCount(blackPawns);
         return numWhitePawns;
     }
 
+    /**
+     * Load a board position from an FEN string. Useful for importing positions from other chess software.
+     *
+     * Example fen a string for the starting position:
+     * rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+     * |______________ Position _________________| | |_________ Game state (castling, en passant, number of moves)
+     *                                             |_________ Turn (w or b)
+     *
+     */
     public static Board loadFromFen(String fen) {
         Board board = new Board();
         board.clearBoard();

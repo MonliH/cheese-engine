@@ -5,20 +5,25 @@ import java.util.Scanner;
 import Game.*;
 
 public class UCI {
+    /**
+     * Run the chess engine using the UCI protocol to easily interface with chess GUI programs.
+     */
     public static void main(String[] args) {
         Engine engine = new Engine();
         Scanner scanner = new Scanner(System.in);
 
         PrintWriter writer = null;
         try {
+            // Create a log file for debugging (hard to debug using some GUIs)
             writer = new PrintWriter("logs.txt", "UTF-8");
         } catch (Exception e) {
             System.out.println("Error writing to file");
         }
 
         while (true) {
-            String line = scanner.nextLine();
-            // write to file
+            String line = scanner.nextLine();  // Get next UCI command
+
+            // Write command to file
             if (writer != null) {
                 writer.println(line);
             }

@@ -9,22 +9,12 @@ public class Game {
     public Board board;
     private boolean whiteTurn;
 
-    private boolean whiteCanCastleKingSide;
-    private boolean whiteCanCastleQueenSide;
-    private boolean blackCanCastleKingSide;
-    private boolean blackCanCastleQueenSide;
-
     private Stack<Piece> previouslyMoved;
     private Stack<Piece> previouslyCaptured;
 
     public Game() {
         whiteTurn = true;
         board = new Board();
-
-        whiteCanCastleKingSide = true;
-        whiteCanCastleQueenSide = true;
-        blackCanCastleKingSide = true;
-        blackCanCastleQueenSide = true;
 
         previouslyMoved = new Stack<Piece>();
         previouslyCaptured = new Stack<Piece>();
@@ -53,31 +43,6 @@ public class Game {
         previouslyMoved.push(movedPiece);
         previouslyCaptured.push(board.getPiece(move.to));
 
-        if (movedPiece.getType() == Type.KING) {
-            if (whiteTurn) {
-                whiteCanCastleKingSide = false;
-                whiteCanCastleQueenSide = false;
-            } else {
-                blackCanCastleKingSide = false;
-                blackCanCastleQueenSide = false;
-            }
-        }
-        if (movedPiece.getType() == Type.ROOK) {
-            if (whiteTurn) {
-                if (move.from.file == 0 && move.from.rank == 0) {
-                    whiteCanCastleQueenSide = false;
-                } else if (move.from.file == 7 && move.from.rank == 0) {
-                    whiteCanCastleKingSide = false;
-                }
-            } else {
-                if (move.from.file == 0 && move.from.rank == 7) {
-                    blackCanCastleQueenSide = false;
-                } else if (move.from.file == 7 && move.from.rank == 7) {
-                    blackCanCastleKingSide = false;
-                }
-            }
-        }
-
         if (movedPiece.getType() == Type.PAWN && (move.to.rank == 0 || move.to.rank == 7)) {
             board.setPiece(move.from, null);
             board.setPiece(move.to, whiteTurn ? Piece.WhiteQueen : Piece.BlackQueen);
@@ -88,10 +53,11 @@ public class Game {
         whiteTurn = !whiteTurn;
     }
 
+    /**
+     * Undo a move that was made with makeMove.
+     * Precondition: the move must be valid and the most recent move played.
+     */
     public void undoMove(Move move) {
-        // undo a move that was made with makeMove
-        // (use move and previouslyMoved)
-
         board.setPiece(move.from, previouslyMoved.pop());
         board.setPiece(move.to, previouslyCaptured.pop());
         whiteTurn = !whiteTurn;
@@ -101,6 +67,10 @@ public class Game {
         return board.toString();
     }
 
+    /**
+     * Returns the number of variations of the game that can be played from this position.
+     * Useful for debugging the move generator (known as perft test).
+     */
     public int searchVariations(short depth) {
         if (depth == 0) {
             return 1;

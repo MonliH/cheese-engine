@@ -10,18 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20c0535a-d932-4125-a35d-b2a70a38bf9f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/cheese_engine_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Engine/UCI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/BoardHash.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Engine/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Engine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/TranspositionEntry.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Engine/Evaluation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Evaluation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Engine/UCI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/UCI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Move.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/File.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/File.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/Rank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Rank.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UI/EnginePlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/EnginePlayer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,11 +132,22 @@
       <workItem from="1687227789845" duration="3784000" />
       <workItem from="1687259365190" duration="8717000" />
       <workItem from="1687296120107" duration="2102000" />
-      <workItem from="1687314626409" duration="500000" />
+      <workItem from="1687314626409" duration="4058000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

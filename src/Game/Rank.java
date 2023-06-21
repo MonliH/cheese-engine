@@ -1,6 +1,8 @@
 package Game;
 
 public class Rank {
+    // Bitmasks for each rank (row) on the board
+
     public static final long ONE = 0b11111111L;
     public static final long TWO = ONE << 8;
     public static final long THREE = TWO << 8;
