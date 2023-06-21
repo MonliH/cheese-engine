@@ -578,7 +578,6 @@ public class Board {
                     file += Character.getNumericValue(piece);
                 } else {
                     Piece pieceType = Piece.fromChar(piece);
-                    System.out.println(file + " rank: " + rank + " file: " + file + " value: " + piece);
                     Square square = LookUpTables.instance.squares[rank * 8 + file];
                     board.setPiece(square, pieceType);
                     file++;

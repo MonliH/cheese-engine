@@ -11,7 +11,7 @@ public class EnginePlayer extends Player {
     }
 
     public Move getMove(Game game) {
-        return engine.bestMove(game, 4);
+        return engine.bestMove(game, 5);
     }
 
     public String getName() {

@@ -24,6 +24,10 @@ public class Move {
         return from + " -> " + to;
     }
 
+    public String toStringWithoutArrow() {
+        return "" + from + to;
+    }
+
     public static Move parseMove(String stringMove) {
         stringMove = stringMove.toLowerCase();
         stringMove  = stringMove.replaceAll("\\s+|-","");

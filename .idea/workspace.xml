@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="cheese-engine:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20c0535a-d932-4125-a35d-b2a70a38bf9f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Engine/BoardHash.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Engine/Engine.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Engine/Evaluation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Engine/TranspositionEntry.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Game/GameResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UI/CLIGame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UI/EnginePlayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UI/HumanPlayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UI/Player.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/cheese_engine_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Engine/UCI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Engine/BoardHash.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Engine/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Engine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Engine/TranspositionEntry.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Move.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Piece.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game/Square.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Square.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/EnginePlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/EnginePlayer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +54,7 @@
     &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
@@ -62,6 +64,9 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -74,7 +79,7 @@
       <recent name="Game" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="cheese-engine" />
@@ -82,6 +87,24 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="UCI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Engine.UCI" />
+      <module name="cheese-engine" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Engine.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.UCI" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -107,7 +130,12 @@
       <workItem from="1686758222121" duration="9219000" />
       <workItem from="1686844608954" duration="5408000" />
       <workItem from="1686930789901" duration="4983000" />
-      <workItem from="1687054687302" duration="763000" />
+      <workItem from="1687054687302" duration="3578000" />
+      <workItem from="1687106289903" duration="4054000" />
+      <workItem from="1687227789845" duration="3784000" />
+      <workItem from="1687259365190" duration="8717000" />
+      <workItem from="1687296120107" duration="2102000" />
+      <workItem from="1687314626409" duration="500000" />
     </task>
     <servers />
   </component>
